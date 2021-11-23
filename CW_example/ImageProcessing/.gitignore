@@ -1,0 +1,22 @@
+# exclude this latex outputs
+*.aux
+*.log
+*.gz
+
+# exclude all images except them needed for the report and in negatives
+*.jpg
+!negatives/*.jpg
+!report/img/*/*.jpg
+!input_images/*.jpg
+
+
+# exclude all compiled executables. Compile them by your own
+dartboard
+face
+a.out
+newhough
+
+# exclude all model files. Again, build it by your own from sources
+*.xml
+*.vec
+!frontalface.xml
