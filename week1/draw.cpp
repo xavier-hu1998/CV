@@ -36,6 +36,15 @@ int main() {
   //save image to file
   imwrite("myimage.jpg", image);
 
+  //construct a window for image display
+  namedWindow("Display window", CV_WINDOW_AUTOSIZE);
+
+  //visualise the loaded image in the window
+  imshow("Display window", image);
+
+  //wait for a key press until returning from the program
+  waitKey(0);
+
   //free memory occupied by image 
   image.release();
 
