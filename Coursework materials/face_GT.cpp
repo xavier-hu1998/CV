@@ -31,23 +31,22 @@ CascadeClassifier cascade;
 int main( int argc, const char** argv )
 {
 
-    int GT_No_Entry1  [1][4] = {(230, 480, 75, 75)};
-	int GT_No_Entry2  [2][4] = {(30 , 410, 40, 40), 
-	                            (300, 410, 30, 30)};
-    int GT_No_Entry4  [5][4] = {(170, 270, 50, 60),
-	                            (480, 280, 50, 70),
-							    (570, 270. 30, 30),
-							    (670, 280, 60, 60),
-							    (870, 240, 60, 60)};
-    int GT_No_Entry5  [1][4] = {(790, 290, 60, 60)};
-	int GT_No_Entry7  [2][4] = {(880, 220, 70, 70),
-	                            (380, 220, 20, 20)};
-	int GT_No_Entry11 [2][4] = {(670, 400, 30, 30),
-	                            (750, 400, 30, 30)};
+    int GT_1  [1][4] = {(230, 480, 75, 75)};
+	int GT_2  [2][4] = {(30 , 410, 40, 40), 
+	                    (300, 410, 30, 30)};
+    int GT_4  [5][4] = {(170, 270, 50, 60),
+	                    (480, 280, 50, 70),
+						(570, 270, 30, 30),
+					    (670, 280, 60, 60),
+					    (870, 240, 60, 60)};
+    int GT_5  [1][4] = {(790, 290, 60, 60)};
+	int GT_7  [2][4] = {(880, 220, 70, 70),
+	                    (380, 220, 20, 20)};
+	int GT_11 [2][4] = {(670, 400, 30, 30),
+	                    (750, 400, 30, 30)};
        // 1. Read Input Image
 	Mat frame = imread(argv[1], CV_LOAD_IMAGE_COLOR);
-
-	string imageName = argv[1];
+	
 
 	// 2. Load the Strong Classifier in a structure called `Cascade'
 	if( !cascade.load( cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
@@ -55,8 +54,15 @@ int main( int argc, const char** argv )
 	// 3. Detect Faces and Display Result
 	detectAndDisplay( frame );
 
+    // string fileName = argv[1];
+	// std::vector<Rect> truths;
+	// if (fileName == "NoEntry1.bmp"){
+	// 	cv::rectangle(frame, Rect(230,480,75,75), cv::Scalar(0, 0, 255), 2);
+	// };
+
 	// 4. Save Result Image
 	imwrite( "detected.jpg", frame );
+	
 
 	return 0;
 }
