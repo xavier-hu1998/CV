@@ -135,7 +135,7 @@ void detectAndDisplay(Mat frame, string fileName)
 	cascade.detectMultiScale(frame_gray, no_entry_VJ, 1.1, 1, 0 | CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(300, 300));
 
 	// 3. Print number of Faces found
-	std::cout << "no_entry found by VJ =" << no_entry_VJ.size() << std::endl;
+	std::cout << no_entry_VJ.size() << std::endl;
 
 	Mat dst;
 	GaussianBlur(frame, dst, Size(3, 3), 1, 1, BORDER_DEFAULT);
@@ -154,7 +154,7 @@ void detectAndDisplay(Mat frame, string fileName)
 	normalize(sobel_m, sobel_m, 0, 255, NORM_MINMAX, CV_8UC1);
 	// normalize(sobel_d,sobel_d, 0, 255, NORM_MINMAX, CV_8UC1);
 
-	// cout << "check 1 " << endl;
+	cout << "check 1 " << endl;
 	// threshold
 	dst = sobel_m;
 	for (int x = 0; x < dst.rows; x++)
@@ -175,29 +175,26 @@ void detectAndDisplay(Mat frame, string fileName)
 	// imshow("img_d",sobel_d);
 	// imshow("sobel_image_x&y", dst);
 
-	// cout << "check 2 " << endl;
+	cout << "check 2 " << endl;
 
 	vector<Vec3f> pcircles;
 	// HoughCircles(dst, pcircles, CV_HOUGH_GRADIENT,1, 80, 100, 50, 0, 150);
 	pcircles = hough_circle_transform(dst, 0, 150, sobel_d, 1, 13);
-	// cout << "check 3 " << endl;
+	cout << "check 3 " << endl;
 
 	// for (size_t i = 0; i < pcircles.size(); i++){
 	//     Vec3f c = pcircles[i];
 	//     circle(frame, Point(c[0], c[1]), c[2],Scalar(255, 0, 0),2 );
 	// }
-
 	for (int i = 0; i < no_entry_VJ.size(); i++)
 	{
 		rectangle(frame, Point(no_entry_VJ[i].x, no_entry_VJ[i].y), Point(no_entry_VJ[i].x + no_entry_VJ[i].width, no_entry_VJ[i].y + no_entry_VJ[i].height), Scalar(0, 255, 255), 2);
 	};
-
-
-	// cout << "check 4 " << endl;
+	cout << "check 4 " << endl;
 	vector<Rect> no_entry;
 	no_entry = no_entry_filter(frame, no_entry_VJ, pcircles, no_entry);
 	// no_entry = no_entry_VJ;
-	// cout << "check 5 " << endl;
+	cout << "check 5 " << endl;
 
 	// 4. Draw box around faces found
 	for (int i = 0; i < no_entry.size(); i++)
@@ -205,7 +202,7 @@ void detectAndDisplay(Mat frame, string fileName)
 		rectangle(frame, Point(no_entry[i].x, no_entry[i].y), Point(no_entry[i].x + no_entry[i].width, no_entry[i].y + no_entry[i].height), Scalar(0, 255, 0), 2);
 	};
 
-	// cout << "check 6 " << endl;
+	cout << "check 6 " << endl;
 
 	if (fileName == "No_entry/NoEntry0.bmp")
 	{
@@ -215,14 +212,12 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry0_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_3/detected_0.jpg", frame );
 	};
 	if (fileName == "No_entry/NoEntry1.bmp")
 	{
 		cv::rectangle(frame, GT_No_Entry1_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry1_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_1.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry2.bmp")
@@ -230,7 +225,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry2_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry2_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_2.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry3.bmp")
@@ -241,7 +235,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry3_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_3/detected_3.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry4.bmp")
@@ -252,7 +245,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry4_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_3/detected_4.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry5.bmp")
@@ -279,7 +271,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_10 = find_the_no_entry_num(no_entry, GT_No_Entry5_10);
 		TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6 + TP_7 + TP_8 + TP_9 + TP_10;
 		num_GT = 10;
-		imwrite( "subtask_3/detected_5.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry6.bmp")
@@ -294,7 +285,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry6_4);
 		TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_3/detected_6.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry7.bmp")
@@ -302,7 +292,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry7_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry7_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_7.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry8.bmp")
@@ -317,7 +306,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry8_4);
 		TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_3/detected_8.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry9.bmp")
@@ -325,7 +313,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry9_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry9_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_9.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry10.bmp")
@@ -338,7 +325,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_3 = find_the_no_entry_num(no_entry, GT_No_Entry10_3);
 		TP = TP_1 + TP_2 + TP_3;
 		num_GT = 3;
-		imwrite( "subtask_3/detected_10.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry11.bmp")
@@ -349,7 +335,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry11_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_3/detected_11.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry12.bmp")
@@ -368,7 +353,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_6 = find_the_no_entry_num(no_entry, GT_No_Entry12_6);
 		TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6;
 		num_GT = 6;
-		imwrite( "subtask_3/detected_12.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry13.bmp")
@@ -376,7 +360,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry13_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry13_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_13.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry14.bmp")
@@ -384,7 +367,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry14_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_no_entry_num(no_entry, GT_No_Entry14_1);
 		num_GT = 1;
-		imwrite( "subtask_3/detected_14.jpg", frame );
 	};
 
 	if (fileName == "No_entry/NoEntry15.bmp")
@@ -395,7 +377,6 @@ void detectAndDisplay(Mat frame, string fileName)
 		int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry15_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_3/detected_15.jpg", frame );
 	};
 
 	FP = no_entry.size() - TP;
@@ -404,7 +385,6 @@ void detectAndDisplay(Mat frame, string fileName)
 	float f1_score = caculate_f1_score(TP, TN, FP, FN);
 	float TPR = (float)TP / ((float)TP + (float)FN);
 
-    std::cout << "no entry find = " << no_entry.size() <<endl;
 	std::cout << "TP = " << TP << std::endl;
 	std::cout << "FP = " << FP << std::endl;
 	std::cout << "TN = " << TN << std::endl;
@@ -565,7 +545,7 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 		}
 	}
 
-	Mat hough(input.rows, input.cols, CV_32FC1);
+	Mat hough_output(input.rows, input.cols, CV_32FC1);
 
 	for (int x = 0; x < input.rows; x++)
 	{
@@ -573,18 +553,18 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 		{
 			for (int r = r_min; r < r_max; r++)
 			{
-				hough.at<float>(x, y) += hough_space[x][y][r];
+				hough_output.at<float>(x, y) += hough_space[x][y][r];
 			}
 		}
 	}
-	imwrite("hough.jpg", hough);
+	imwrite("hough.jpg", hough_output);
 
 	vector<Vec3f> circles;
 	for (int x = 0; x < input.rows; x++)
 	{
 		for (int y = 0; y < input.cols; y++)
 		{
-			bool test_pass = 1;
+			bool test_pass = true;
 			map<int, int> t_circles;
 			for (int r = r_min; r < r_max; r++)
 			{
@@ -630,14 +610,13 @@ vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> 
 		Rect circles_rect(c[0] - c[2], c[1] - c[2], 2 * c[2], 2 * c[2]);
 		circles_rects.push_back(circles_rect);
 	}
-	cout<< "size_hough_circles = " << circles_rects.size() << endl;
-	// cout << "filter_check 1 " << endl;
+	cout << "filter_check 1 " << endl;
 
-	// for (size_t i = 0; i < circles_rects.size(); i++)
-	// {
-	// 	rectangle(frame, Point(circles_rects[i].x, circles_rects[i].y), Point(circles_rects[i].x + circles_rects[i].width, circles_rects[i].y + circles_rects[i].height), Scalar(255, 0, 0), 2);
-	// }
-	// cout << "filter_check 2 " << endl;
+	for (size_t i = 0; i < circles_rects.size(); i++)
+	{
+		rectangle(frame, Point(circles_rects[i].x, circles_rects[i].y), Point(circles_rects[i].x + circles_rects[i].width, circles_rects[i].y + circles_rects[i].height), Scalar(255, 0, 0), 2);
+	}
+	cout << "filter_check 2 " << endl;
 
 	for (size_t i = 0; i < no_entry_VJ.size(); i++)
 	{
@@ -651,8 +630,7 @@ vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> 
 		}
 	}
 	return output;
-	cout << "output = "<< output.size() << endl;
-	// cout << "filter_check 3 " << endl;
+	cout << "filter_check 3 " << endl;
 }
 
 // ./a.out No_entry/NoEntry1.bmp

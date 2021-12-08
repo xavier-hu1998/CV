@@ -40,7 +40,6 @@ Rect GT_No_Entry7_1(880, 220, 70, 70);
 Rect GT_No_Entry7_2(385, 220, 25, 25);
 Rect GT_No_Entry11_1(670, 400, 30, 30);
 Rect GT_No_Entry11_2(750, 400, 30, 30);
-Rect GT_No_Entry12_1(815, 445, 30, 30);
 
 
 /** @function main */
@@ -155,19 +154,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		imwrite( "subtask_1/detected_11.jpg", frame );
 
 	}
-	if (fileName == "No_entry/NoEntry12.bmp")
-	{
-		cv::rectangle(frame, GT_No_Entry12_1, cv::Scalar(0, 0, 255), 2);
-		int TP_1 = find_the_face_num(faces, GT_No_Entry11_1);
-		TP = TP_1;
-		num_GT = 1;
-		imwrite( "subtask_1/detected_12.jpg", frame );
-	}
-	else{
-		TP = 0;
-		num_GT =0;
-	}
-
 	FP = faces.size() - TP;
 	TN = 0;
 	// FN = max(0, num_GT - TP);

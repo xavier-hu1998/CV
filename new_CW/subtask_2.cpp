@@ -110,8 +110,6 @@ int main( int argc, const char** argv )
 
 	// 4. Save Result Image
 	imwrite( "detected.jpg", frame );
-	imshow("frame", frame);
-	waitKey(0);
 	
 
 	return 0;
@@ -153,7 +151,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry0_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_0.jpg", frame );
 
 	};
     if (fileName == "No_entry/NoEntry1.bmp")
@@ -161,7 +158,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry1_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry1_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_1.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry2.bmp")
@@ -169,7 +165,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry2_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry2_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_2.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry3.bmp")
@@ -180,7 +175,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry3_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_3.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry4.bmp")
@@ -191,7 +185,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry4_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_4.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry5.bmp")
@@ -218,7 +211,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_10 = find_the_no_entry_num(no_entry, GT_No_Entry5_10);
         TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6 + TP_7 + TP_8 + TP_9 + TP_10;
 		num_GT = 10;
-		imwrite( "subtask_2/detected_5.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry6.bmp")
@@ -233,7 +225,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry6_4);
         TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_2/detected_6.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry7.bmp")
@@ -241,7 +232,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry7_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry7_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_7.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry8.bmp")
@@ -256,7 +246,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry8_4);
         TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_2/detected_8.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry9.bmp")
@@ -264,7 +253,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry9_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry9_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_9.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry10.bmp")
@@ -277,7 +265,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_3 = find_the_no_entry_num(no_entry, GT_No_Entry10_3);
         TP = TP_1 + TP_2 + TP_3;
 		num_GT = 3;
-		imwrite( "subtask_2/detected_10.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry11.bmp")
@@ -288,7 +275,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry11_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_11.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry12.bmp")
@@ -307,7 +293,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_6 = find_the_no_entry_num(no_entry, GT_No_Entry12_6);
         TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6;
 		num_GT = 6;
-		imwrite( "subtask_2/detected_12.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry13.bmp")
@@ -315,7 +300,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry13_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry13_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_13.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry14.bmp")
@@ -323,7 +307,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry14_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry14_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_14.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry15.bmp")
@@ -334,7 +317,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry15_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_15.jpg", frame );
 	};
 
     FP = no_entry.size() - TP;
@@ -369,7 +351,7 @@ float get_iou(Rect truth, Rect face) {
 }
 
 int find_the_no_entry_num(vector<Rect> no_entry, Rect truths){
-	float iou_thredhold = 0.4;
+	float iou_thredhold = 0.6;
 	int TP = 0;
 	for ( size_t i = 0; i < no_entry.size(); i++){
 		float IoU = get_iou(truths, no_entry[i]);

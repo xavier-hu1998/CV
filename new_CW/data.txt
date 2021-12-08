@@ -1,0 +1,67 @@
+./opencv_createsamples -img no_entry.jpg -vec no_entry.vec -w 20 -h 20 -num 1000 -maxidev 80 -maxxangle 0.8 -maxyangle 1 -maxzangle 0.2
+
+
+./opencv_traincascade -data NoEntrycascade -vec no_entry.vec -bg negatives.dat -numPos 800 -numNeg 800 numStages 3 -maxDepth 1 -w 20 -h 20 -minHitRate 0.999 -maxFalseAlarmRate 0.05 -mode ALL
+
+
+subtask 1:
+
+1:
+9
+TP = 1
+FP = 8
+TN = 0
+FN = 0
+num_GT =1
+f1 score = 0.2
+TPR =1
+
+2:
+14
+TP = 2
+FP = 12
+TN = 0
+FN = 0
+num_GT =2
+f1 score = 0.25
+TPR =1
+
+4:
+31
+TP = 5
+FP = 26
+TN = 0
+FN = 0
+num_GT =5
+f1 score = 0.277778
+TPR =1
+
+5:
+5
+TP = 1
+FP = 4
+TN = 0
+FN = 0
+num_GT =1
+f1 score = 0.333333
+TPR =1
+
+7:
+7
+TP = 1
+FP = 6
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.222222
+TPR =0.5
+
+11:
+9
+TP = 2
+FP = 7
+TN = 0
+FN = 0
+num_GT =2
+f1 score = 0.363636
+TPR =1

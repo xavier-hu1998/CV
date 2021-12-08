@@ -22,6 +22,14 @@ void detectAndDisplay( Mat frame, string fileName );
 float get_iou(Rect truth, Rect face);
 int find_the_no_entry_num(vector<Rect> no_entry, Rect truths);
 float caculate_f1_score (int TP, int TN, int FP, int FN);
+void sobel(Mat &input,Mat &x_sobel, Mat &y_sobel, Mat &m_sobel, Mat &d_sobel);
+vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &direction, int min_distence);
+// vector<Rect> no_entry_filter(vector<Rect> no_entry, vector<Vec3f> circles);
+vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> circles, vector<Rect> &output);
+
+
+
+
 
 /** Global variables */
 String cascade_name = "NoEntrycascade/cascade.xml";
@@ -110,8 +118,6 @@ int main( int argc, const char** argv )
 
 	// 4. Save Result Image
 	imwrite( "detected.jpg", frame );
-	imshow("frame", frame);
-	waitKey(0);
 	
 
 	return 0;
@@ -120,7 +126,8 @@ int main( int argc, const char** argv )
 /** @function detectAndDisplay */
 void detectAndDisplay( Mat frame, string fileName)
 {
-	std::vector<Rect> no_entry;
+	std::vector<Rect> no_entry_VJ;
+	// std::vector<Rect> no_entry_finded;
     // std::vector<Rect> truth;
 	Mat frame_gray;
     int TP;
@@ -134,12 +141,61 @@ void detectAndDisplay( Mat frame, string fileName)
 	equalizeHist( frame_gray, frame_gray );
 
 	// 2. Perform Viola-Jones Object Detection 
-	cascade.detectMultiScale( frame_gray, no_entry, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(300,300) );
+	cascade.detectMultiScale( frame_gray, no_entry_VJ, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(300,300) );
 
        // 3. Print number of Faces found
-	std::cout << no_entry.size() << std::endl;
+	std::cout << no_entry_VJ.size() << std::endl;
 
-       // 4. Draw box around faces found
+
+    Mat dst;
+	GaussianBlur(frame, dst,Size(3,3),1,1,BORDER_DEFAULT);
+	// medianBlur(frame, dst, 3);
+	cvtColor( dst,dst, CV_BGR2GRAY );
+
+	// imshow("GB", dst);
+
+    Mat sobel_x(frame.size(), CV_32FC1);
+	Mat sobel_y(frame.size(), CV_32FC1);
+	Mat sobel_m(frame.size(), CV_32FC1);
+	Mat sobel_d(frame.size(), CV_32FC1);
+
+    sobel(dst, sobel_x,sobel_y,sobel_m,sobel_d);
+
+	normalize(sobel_m, sobel_m, 0, 255, NORM_MINMAX, CV_8UC1);
+	// normalize(sobel_d,sobel_d, 0, 255, NORM_MINMAX, CV_8UC1);
+
+    // threshold
+	dst = sobel_m;
+    for (int x= 0; x<dst.rows; x++){
+        for (int y = 0; y < dst.cols; y++ ){
+            if (dst.at<uchar>(x, y)>70){
+                dst.at<uchar>(x, y) = 255;
+            }
+            else{
+                dst.at<uchar>(x, y) = 0;
+            }
+        }
+    };
+	// imshow("img_m",dst);
+	// imshow("img_d",sobel_d);
+    // imshow("sobel_image_x&y", dst);
+
+
+
+    vector<Vec3f>pcircles;
+    // HoughCircles(dst, pcircles, CV_HOUGH_GRADIENT,1, 80, 100, 50, 0, 150);
+	pcircles = hough_circle_transform(dst, 0, 200, sobel_d, 15);
+
+    // for (size_t i = 0; i < pcircles.size(); i++){
+    //     Vec3f c = pcircles[i];
+    //     circle(frame, Point(c[0], c[1]), c[2],Scalar(255, 0, 0),2 ); 
+    // }
+	vector<Rect> no_entry;
+	no_entry_filter(frame, no_entry_VJ, pcircles, no_entry);
+	// no_entry = no_entry_VJ;
+
+
+	// 4. Draw box around faces found
 	for( int i = 0; i < no_entry.size(); i++ )
 	{
 		rectangle(frame, Point(no_entry[i].x, no_entry[i].y), Point(no_entry[i].x + no_entry[i].width, no_entry[i].y + no_entry[i].height), Scalar( 0, 255, 0 ), 2);
@@ -153,7 +209,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry0_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_0.jpg", frame );
 
 	};
     if (fileName == "No_entry/NoEntry1.bmp")
@@ -161,7 +216,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry1_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry1_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_1.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry2.bmp")
@@ -169,7 +223,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry2_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry2_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_2.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry3.bmp")
@@ -180,7 +233,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry3_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_3.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry4.bmp")
@@ -191,7 +243,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry4_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_4.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry5.bmp")
@@ -218,7 +269,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_10 = find_the_no_entry_num(no_entry, GT_No_Entry5_10);
         TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6 + TP_7 + TP_8 + TP_9 + TP_10;
 		num_GT = 10;
-		imwrite( "subtask_2/detected_5.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry6.bmp")
@@ -233,7 +283,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry6_4);
         TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_2/detected_6.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry7.bmp")
@@ -241,7 +290,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry7_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry7_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_7.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry8.bmp")
@@ -256,7 +304,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_4 = find_the_no_entry_num(no_entry, GT_No_Entry8_4);
         TP = TP_1 + TP_2 + TP_3 + TP_4;
 		num_GT = 4;
-		imwrite( "subtask_2/detected_8.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry9.bmp")
@@ -264,7 +311,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry9_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry9_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_9.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry10.bmp")
@@ -277,7 +323,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_3 = find_the_no_entry_num(no_entry, GT_No_Entry10_3);
         TP = TP_1 + TP_2 + TP_3;
 		num_GT = 3;
-		imwrite( "subtask_2/detected_10.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry11.bmp")
@@ -288,7 +333,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry11_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_11.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry12.bmp")
@@ -307,7 +351,6 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_6 = find_the_no_entry_num(no_entry, GT_No_Entry12_6);
         TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5 + TP_6;
 		num_GT = 6;
-		imwrite( "subtask_2/detected_12.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry13.bmp")
@@ -315,7 +358,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry13_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry13_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_13.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry14.bmp")
@@ -323,7 +365,6 @@ void detectAndDisplay( Mat frame, string fileName)
 		cv::rectangle(frame, GT_No_Entry14_1, cv::Scalar(0, 0, 255), 2);
         TP = find_the_no_entry_num(no_entry, GT_No_Entry14_1);
         num_GT = 1;
-		imwrite( "subtask_2/detected_14.jpg", frame );
 	};
 
     if (fileName == "No_entry/NoEntry15.bmp")
@@ -334,12 +375,11 @@ void detectAndDisplay( Mat frame, string fileName)
         int TP_2 = find_the_no_entry_num(no_entry, GT_No_Entry15_2);
         TP = TP_1 + TP_2;
 		num_GT = 2;
-		imwrite( "subtask_2/detected_15.jpg", frame );
 	};
 
     FP = no_entry.size() - TP;
 	TN = 0;
-	FN = max(0, num_GT-TP);
+	FN = num_GT-TP;
 	float f1_score = caculate_f1_score(TP, TN, FP, FN);
     float TPR= (float)TP/((float)TP + (float)FN);
 
@@ -352,6 +392,9 @@ void detectAndDisplay( Mat frame, string fileName)
     std::cout << "num_GT =" << num_GT << std::endl;
     std::cout << "f1 score = " << f1_score << std::endl;
 	std::cout << "TPR =" << TPR << std::endl;
+
+	imshow("frame",frame);
+	waitKey(0);
 
 }
 
@@ -369,7 +412,7 @@ float get_iou(Rect truth, Rect face) {
 }
 
 int find_the_no_entry_num(vector<Rect> no_entry, Rect truths){
-	float iou_thredhold = 0.4;
+	float iou_thredhold = 0.6;
 	int TP = 0;
 	for ( size_t i = 0; i < no_entry.size(); i++){
 		float IoU = get_iou(truths, no_entry[i]);
@@ -394,6 +437,168 @@ float caculate_f1_score (int TP, int TN, int FP, int FN){
 	// float f1_score = 4.0f/11.0f
 	return f1_score;
 }
+void sobel(Mat &input,Mat &x_sobel, Mat &y_sobel, Mat &m_sobel, Mat &d_sobel){
+
+	Mat X_kernel = Mat::ones(3, 3, CV_32F);
+	Mat Y_kernel = Mat::ones(3, 3, CV_32F);
+	
+	X_kernel.at<float>(0,0) = -1;
+	X_kernel.at<float>(1,0) = -2;
+	X_kernel.at<float>(2,0) = -1;
+	X_kernel.at<float>(0,1) =  0;
+	X_kernel.at<float>(1,1) =  0;
+	X_kernel.at<float>(2,1) =  0;
+	X_kernel.at<float>(0,2) =  1;
+	X_kernel.at<float>(1,2) =  2;
+	X_kernel.at<float>(2,2) =  1;
+
+	Y_kernel.at<float>(0,0) = -1;
+	Y_kernel.at<float>(1,0) =  0;
+	Y_kernel.at<float>(2,0) =  1;
+	Y_kernel.at<float>(0,1) = -2;
+	Y_kernel.at<float>(1,1) =  0;
+	Y_kernel.at<float>(2,1) =  2;
+	Y_kernel.at<float>(0,2) = -1;
+	Y_kernel.at<float>(1,2) =  0;
+	Y_kernel.at<float>(2,2) =  1;
+
+	Mat input_padded;
+	copyMakeBorder(input,input_padded,1,1,1,1,BORDER_REPLICATE);
+
+	for ( int i = 0; i < input.rows; i++ ) {	
+		for( int j = 0; j < input.cols; j++ ) {
+			float x_sum = 0.0;
+			float y_sum = 0.0;
+			for( int a = -1; a <= 1; a++ ) {
+				for( int b = -1; b <= 1; b++ ) {
+					float val_img = ( int ) input_padded.at<uchar>( i + a + 1, j + b + 1 );
+					float x_kernel = X_kernel.at<float>( a + 1, b + 1 );
+					float y_kernel = Y_kernel.at<float>( a + 1, b + 1 );
+
+					x_sum = x_sum + val_img * x_kernel;
+					y_sum = y_sum + val_img * y_kernel;    
+				}
+			}
+			x_sobel.at<float>(i, j) = (float) x_sum;
+			y_sobel.at<float>(i, j) = (float) y_sum;
+			m_sobel.at<float>(i, j) = (float) sqrt((y_sum*y_sum) + (x_sum*x_sum));
+			d_sobel.at<float>(i, j) = (float) atan2(y_sum, x_sum);
+
+		}
+	}
+	cout << "sobel edge detection finished" << endl;
+}
+
+
+
+vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &direction, int min_distence) {
+
+    int ***hough_space = (int ***) malloc(input.rows * sizeof(int **));
+    for (int i = 0; i < input.rows; i++) {
+        hough_space[i] = (int **) malloc(input.cols * sizeof(int *));
+	    for (int j = 0; j < input.cols; j++) {
+  	        hough_space[i][j] = (int *) malloc(r_max * sizeof(int));
+	    }
+ 
+    }	
+
+    for (int i = 0; i < input.rows; i++) {
+        for (int j = 0; j < input.cols; j++) {
+            for (int r = 0; r < r_max; r++) {
+                hough_space[i][j][r] = 0;
+            }
+        }
+    }
+
+    for (int x = 0; x < input.rows; x++) {
+        for (int y = 0; y < input.cols; y++) {
+			if(input.at<uchar>(x,y) == 255) {
+				for (int r = 0; r < r_max; r++) {
+					int x_circle = int(r * sin(direction.at<float>(x,y)));
+					int y_circle = int(r * cos(direction.at<float>(x,y)));
+
+					if((x - x_circle) >= 0 && (x - x_circle) < input.rows && (y - y_circle) >= 0 && (y - y_circle) < input.cols) {
+						hough_space[(x - x_circle)][(y - y_circle)][r] = hough_space[(x - x_circle)][(y - y_circle)][r]+ 1;
+					}
+					if((x + x_circle) >= 0 && (x + x_circle) < input.rows && (y + y_circle) >= 0 && (y + y_circle) < input.cols) {
+						hough_space[(x + x_circle)][(y + y_circle)][r] =hough_space[(x + x_circle)][(y + y_circle)][r] + 1;
+					}
+				}
+			}
+        }
+    }
+
+	Mat hough_output(input.rows, input.cols, CV_32FC1);
+ 
+    for (int x = 0; x < input.rows; x++) {
+        for (int y = 0; y < input.cols; y++) {
+            for (int r = r_min; r < r_max; r++) {
+                hough_output.at<float>(x,y) += hough_space[x][y][r];
+            }
+ 
+        }
+    }
+	imwrite("hough.jpg", hough_output);
+
+
+	vector<Vec3f> circles;
+	for (int x = 0; x < input.rows; x++) {
+        for (int y = 0; y < input.cols; y++) {
+			bool test_pass = true;
+			map<int, int> t_circles;
+            for (int r = r_min; r < r_max; r++) {
+				if(hough_space[x][y][r] > 15) {
+					t_circles[r] = hough_space[x][y][r];
+				}
+            }
+			int max_c = 0;
+			int max_r = 0;
+		
+			for(map<int, int>::const_iterator it = t_circles.begin(); it != t_circles.end(); ++it) {
+		
+				for(int i = 0; i < circles.size(); i++) {
+					Vec3f circle = circles[i];
+					int r = circle[2];
+					if(r - min_distence < it->first && r + min_distence > it->first){
+						test_pass = false;
+					}
+				}
+				if(test_pass) {
+					Vec3f circle(y,x, it->first);
+					circles.push_back(circle);
+				}
+			}
+		
+        }
+    }
+
+	return circles;
+}
+
+vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> circles, vector<Rect> &output){
+	float iou_thredhold = 0.4;
+	vector<Rect> circles_rects;
+	for (size_t i = 0; i < circles.size(); i++){
+        Vec3f c = circles[i];
+		Rect circles_rect(c[0]-c[2],c[1]-c[2], 2*c[2], 2*c[2] );
+		circles_rects.push_back(circles_rect);
+    }
+	
+    for( int i = 0; i < circles_rects.size(); i++ )
+	{
+		rectangle(frame, Point(circles_rects[i].x, circles_rects[i].y), Point(circles_rects[i].x + circles_rects[i].width, circles_rects[i].y + circles_rects[i].height), Scalar( 255,0, 0 ), 2);
+	}
+
+	for (int i = 0; i < no_entry_VJ.size(); i++){
+		for (int j = 0; j < circles_rects.size(); j++ ){
+			float IoU = get_iou(circles_rects[j], no_entry_VJ[i]);
+			if (IoU > iou_thredhold){
+				output.push_back(no_entry_VJ[i]);
+			}
+
+		}
+	}
+}
 
 
 
@@ -401,8 +606,10 @@ float caculate_f1_score (int TP, int TN, int FP, int FN){
 
 
 
-// ./opencv_createsamples -img no_entry.jpg -vec no_entry.vec -w 20 -h 20 -num 500 -maxidev 80 -maxxangle 0.8 -maxyangle 0.8 -maxzangle 0.2
 
-// ./opencv_traincascade -data NoEntrycascade -vec no_entry.vec -bg negatives.dat -numPos 500 -numNeg 500 -numStages 3 -maxDepth 1 -w 20 -h 20 -minHitRate 0.999 -maxFalseAlarmRate 0.05 -mode ALL
 
-// g++ subtask_2.cpp /usr/lib64/libopencv_core.so.2.4 /usr/lib64/libopencv_highgui.so.2.4 /usr/lib64/libopencv_imgproc.so.2.4 /usr/lib64/libopencv_objdetect.so.2.4
+
+
+// ./a.out No_entry/NoEntry1.bmp
+// g++ subtask_4.cpp /usr/lib64/libopencv_core.so.2.4 /usr/lib64/libopencv_highgui.so.2.4 /usr/lib64/libopencv_imgproc.so.2.4 /usr/lib64/libopencv_objdetect.so.2.4
+

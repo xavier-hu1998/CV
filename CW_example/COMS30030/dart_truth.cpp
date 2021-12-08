@@ -106,7 +106,7 @@ int main( int argc, const char** argv ) {
 	threshold(image_m, threshold_magnitude, image_n, "source");
 
 	// 6. Perform HoughTransform
-	vector<vector<int>> circles = ch_transform(image_m, 20, min(frame.rows,frame.cols)/2, img_d, image_n);
+	vector<vector<int> > circles = ch_transform(image_m, 20, min(frame.rows,frame.cols)/2, img_d, image_n);
 	lh_transform(image_m, img_d, image_n);
 	
 	// 7. Detect Faces and Display Result
@@ -517,7 +517,7 @@ int pixel_count(string num) {
 	return count;
 }
 
-vector<Rect> filter_darts(vector<Rect> darts, vector<vector<int>> circles, string num, int pixels) {
+vector<Rect> filter_darts(vector<Rect> darts, vector<vector<int> > circles, string num, int pixels) {
 	vector<Rect> darts_filtered;
 	Mat load_lines = imread("detected_darts/"+num+"/threshold_lines.jpg", 1);
 	Mat lines;
@@ -669,7 +669,7 @@ void debug_out(vector<Rect> darts_filtered, vector<Rect> truths, string num) {
 }
 
 /** @function detectAndDisplay */
-void detectAndDisplay( Mat frame, vector<Rect> truths, string num, vector<vector<int>> circles ) {
+void detectAndDisplay( Mat frame, vector<Rect> truths, string num, vector<vector<int> > circles ) {
 
 	std::vector<Rect> darts;
 	Mat frame_gray;
