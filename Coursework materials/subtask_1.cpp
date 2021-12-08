@@ -58,7 +58,8 @@ int main( int argc, const char** argv )
 	detectAndDisplay( frame, fileName );
 
 	// 4. Save Result Image
-	imwrite( "detected.jpg", frame );
+
+	imwrite("detected.jpg", frame);
 
 	return 0;
 }
@@ -95,6 +96,7 @@ void detectAndDisplay( Mat frame, string fileName)
 		TP = find_the_face_num(faces, GT_No_Entry1_1);
 		num_GT = 1;
 		// cv::rectangle(frame, faces[i], cv::Scalar(255, 0, 0),2);
+		imwrite( "subtask_1/detected_1.jpg", frame );
 	};
 	if (fileName == "No_entry/NoEntry2.bmp")
 	{
@@ -105,6 +107,7 @@ void detectAndDisplay( Mat frame, string fileName)
 		TP = TP_1 + TP_2;
 		num_GT = 2;
 		// std::cout << TP;
+		imwrite( "subtask_1/detected_2.jpg", frame );
 	}
 	if (fileName == "No_entry/NoEntry4.bmp")
 	{
@@ -120,12 +123,14 @@ void detectAndDisplay( Mat frame, string fileName)
 		int TP_5 = find_the_face_num(faces, GT_No_Entry4_5);
 		TP = TP_1 + TP_2 + TP_3 + TP_4 + TP_5;
 		num_GT  = 5;
+		imwrite( "subtask_1/detected_4.jpg", frame );
 	}
 	if (fileName == "No_entry/NoEntry5.bmp")
 	{
 		cv::rectangle(frame, GT_No_Entry5_1, cv::Scalar(0, 0, 255), 2);
 		TP = find_the_face_num(faces, GT_No_Entry5_1);
 		num_GT = 1;
+		imwrite( "subtask_1/detected_5.jpg", frame );
 	}
 	if (fileName == "No_entry/NoEntry7.bmp")
 	{
@@ -135,6 +140,7 @@ void detectAndDisplay( Mat frame, string fileName)
 		int TP_2 = find_the_face_num(faces, GT_No_Entry7_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
+		imwrite( "subtask_1/detected_7.jpg", frame );
 
 	}
 	if (fileName == "No_entry/NoEntry11.bmp")
@@ -145,6 +151,7 @@ void detectAndDisplay( Mat frame, string fileName)
 		int TP_2 = find_the_face_num(faces, GT_No_Entry11_2);
 		TP = TP_1 + TP_2;
 		num_GT = 2;
+		imwrite( "subtask_1/detected_11.jpg", frame );
 
 	}
 	FP = faces.size() - TP;
@@ -164,6 +171,9 @@ void detectAndDisplay( Mat frame, string fileName)
 	std::cout << "num_GT =" << num_GT << std::endl;
     std::cout << "f1 score = " << f1_score << std::endl;
 	std::cout << "TPR =" << TPR << std::endl;
+
+	// imshow("frame", frame);
+	// waitKey(0);
 
 	// printf("TP = %f \n",TP);
 	// printf("FP = %f \n",FP);
@@ -222,3 +232,9 @@ float caculate_f1_score (int TP, int TN, int FP, int FN){
 	// float f1_score = 4.0f/11.0f
 	return f1_score;
 }
+
+
+
+// g++ subtask_1.cpp /usr/lib64/libopencv_core.so.2.4 /usr/lib64/libopencv_highgui.so.2.4 /usr/lib64/libopencv_imgproc.so.2.4 /usr/lib64/libopencv_objdetect.so.2.4
+
+
