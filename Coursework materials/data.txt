@@ -58,3 +58,213 @@ subtask 2:
   3   TP = 1    FP = 2    TN = 0   FN = 1   num_GT =2   f1 score = 0.4        TPR =0.5
 
 
+
+
+subtask3:
+
+bash-4.2$ ./a.out No_entry/NoEntry0.bmp
+no_entry found by VJ =15
+no entry find = 2
+TP = 2
+FP = 0
+TN = 0
+FN = 0
+num_GT =2
+f1 score = 1
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry1.bmp
+no_entry found by VJ =8
+no entry find = 1
+TP = 1
+FP = 0
+TN = 0
+FN = 0
+num_GT =1
+f1 score = 1
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry2.bmp
+no_entry found by VJ =9
+no entry find = 0
+TP = 0
+FP = 0
+TN = 0
+FN = 1
+num_GT =1
+f1 score = 0
+TPR =0
+bash-4.2$ ./a.out No_entry/NoEntry3.bmp
+no_entry found by VJ =7
+no entry find = 2
+TP = 1
+FP = 1
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.5
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry4.bmp
+no_entry found by VJ =6
+no entry find = 2
+TP = 2
+FP = 0
+TN = 0
+FN = 0
+num_GT =2
+f1 score = 1
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry5.bmp
+no_entry found by VJ =9
+no entry find = 2
+TP = 1
+FP = 1
+TN = 0
+FN = 9
+num_GT =10
+f1 score = 0.166667
+TPR =0.1
+bash-4.2$ ./a.out No_entry/NoEntry6.bmp
+no_entry found by VJ =4
+no entry find = 2
+TP = 2
+FP = 0
+TN = 0
+FN = 2
+num_GT =4
+f1 score = 0.666667
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry7.bmp
+no_entry found by VJ =7
+no entry find = 0
+TP = 0
+FP = 0
+TN = 0
+FN = 1
+num_GT =1
+f1 score = 0
+TPR =0
+bash-4.2$ ./a.out No_entry/NoEntry8.bmp
+no_entry found by VJ =6
+no entry find = 4
+TP = 4
+FP = 0
+TN = 0
+FN = 0
+num_GT =4
+f1 score = 1
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry9.bmp
+no_entry found by VJ =4
+no entry find = 1
+TP = 1
+FP = 0
+TN = 0
+FN = 0
+num_GT =1
+f1 score = 1
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry10.bmp
+no_entry found by VJ =5
+no entry find = 4
+TP = 3
+FP = 1
+TN = 0
+FN = 0
+num_GT =3
+f1 score = 0.857143
+TPR =1
+bash-4.2$ ./a.out No_entry/NoEntry11.bmp
+no_entry found by VJ =9
+no entry find = 1
+TP = 1
+FP = 0
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.666667
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry12.bmp
+no_entry found by VJ =11
+no entry find = 3
+TP = 3
+FP = 0
+TN = 0
+FN = 3
+num_GT =6
+f1 score = 0.666667
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry13.bmp
+no_entry found by VJ =6
+no entry find = 0
+TP = 0
+FP = 0
+TN = 0
+FN = 1
+num_GT =1
+f1 score = 0
+TPR =0
+bash-4.2$ ./a.out No_entry/NoEntry14.bmp
+no_entry found by VJ =5
+no entry find = 0
+TP = 0
+FP = 0
+TN = 0
+FN = 1
+num_GT =1
+f1 score = 0
+TPR =0
+bash-4.2$ ./a.out No_entry/NoEntry15.bmp
+no_entry found by VJ =3
+no entry find = 1
+TP = 1
+FP = 0
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.666667
+TPR =0.5
+
+
+
+subtask 4:
+
+bash-4.2$ ./a.out No_entry/NoEntry3.bmp
+no_entry found by VJ =7
+no entry find = 1
+TP = 1
+FP = 0
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.666667
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry10.bmp
+no_entry found by VJ =5
+no entry find = 3
+TP = 2
+FP = 1
+TN = 0
+FN = 1
+num_GT =3
+f1 score = 0.666667
+TPR =0.666667
+
+bash-4.2$ ./a.out No_entry/NoEntry3.bmp
+no_entry found by VJ =7
+no entry find = 2
+TP = 1
+FP = 1
+TN = 0
+FN = 1
+num_GT =2
+f1 score = 0.5
+TPR =0.5
+bash-4.2$ ./a.out No_entry/NoEntry10.bmp
+no_entry found by VJ =5
+no entry find = 4
+TP = 3
+FP = 1
+TN = 0
+FN = 0
+num_GT =3
+f1 score = 0.857143
+TPR =1

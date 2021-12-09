@@ -65,13 +65,13 @@ Rect GT_No_Entry7_1(555, 175, 35, 35);
 Rect GT_No_Entry8_1(195, 80, 100, 90);
 Rect GT_No_Entry8_2(145, 180, 60, 60);
 Rect GT_No_Entry8_3(105, 240, 40, 40);
-Rect GT_No_Entry8_4(85, 260, 30, 30);
+Rect GT_No_Entry8_4(85, 260, 40, 40);
 
 Rect GT_No_Entry9_1(470, 575, 50, 55);
 
 Rect GT_No_Entry10_1(230, 130, 80, 80);
 Rect GT_No_Entry10_2(500, 155, 90, 90);
-Rect GT_No_Entry10_3(580, 170, 50, 70);
+Rect GT_No_Entry10_3(580, 180, 50, 50);
 
 Rect GT_No_Entry11_1(50, 215, 60, 60);
 Rect GT_No_Entry11_2(440, 160, 90, 85);
@@ -137,6 +137,7 @@ void detectAndDisplay(Mat frame, string fileName)
 	// 3. Print number of Faces found
 	std::cout << "no_entry found by VJ =" << no_entry_VJ.size() << std::endl;
 
+
 	Mat dst;
 	GaussianBlur(frame, dst, Size(3, 3), 1, 1, BORDER_DEFAULT);
 	// medianBlur(frame, dst, 3);
@@ -179,7 +180,7 @@ void detectAndDisplay(Mat frame, string fileName)
 
 	vector<Vec3f> pcircles;
 	// HoughCircles(dst, pcircles, CV_HOUGH_GRADIENT,1, 80, 100, 50, 0, 150);
-	pcircles = hough_circle_transform(dst, 0, 150, sobel_d, 1, 13);
+	pcircles = hough_circle_transform(dst, 0, 150, sobel_d, 1, 12);
 	// cout << "check 3 " << endl;
 
 	// for (size_t i = 0; i < pcircles.size(); i++){
@@ -187,10 +188,10 @@ void detectAndDisplay(Mat frame, string fileName)
 	//     circle(frame, Point(c[0], c[1]), c[2],Scalar(255, 0, 0),2 );
 	// }
 
-	for (int i = 0; i < no_entry_VJ.size(); i++)
-	{
-		rectangle(frame, Point(no_entry_VJ[i].x, no_entry_VJ[i].y), Point(no_entry_VJ[i].x + no_entry_VJ[i].width, no_entry_VJ[i].y + no_entry_VJ[i].height), Scalar(0, 255, 255), 2);
-	};
+	// for (int i = 0; i < no_entry_VJ.size(); i++)
+	// {
+	// 	rectangle(frame, Point(no_entry_VJ[i].x, no_entry_VJ[i].y), Point(no_entry_VJ[i].x + no_entry_VJ[i].width, no_entry_VJ[i].y + no_entry_VJ[i].height), Scalar(0, 255, 255), 2);
+	// };
 
 
 	// cout << "check 4 " << endl;
@@ -413,8 +414,8 @@ void detectAndDisplay(Mat frame, string fileName)
 	std::cout << "f1 score = " << f1_score << std::endl;
 	std::cout << "TPR =" << TPR << std::endl;
 
-	imshow("frame", frame);
-	waitKey(0);
+	// imshow("frame", frame);
+	// waitKey(0);
 }
 
 float get_iou(Rect truth, Rect face)
@@ -434,7 +435,7 @@ float get_iou(Rect truth, Rect face)
 
 int find_the_no_entry_num(vector<Rect> no_entry, Rect truths)
 {
-	float iou_thredhold = 0.6;
+	float iou_thredhold = 0.4;
 	int TP = 0;
 	for (size_t i = 0; i < no_entry.size(); i++)
 	{
@@ -514,7 +515,7 @@ void sobel(Mat &input, Mat &x_sobel, Mat &y_sobel, Mat &m_sobel, Mat &d_sobel)
 			d_sobel.at<float>(i, j) = (float)atan2(y_sum, x_sum);
 		}
 	}
-	cout << "sobel edge detection finished" << endl;
+	// cout << "sobel edge detection finished" << endl;
 }
 
 vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &direction, int min_distence, int hough_threshold)
@@ -573,7 +574,7 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 		{
 			for (int r = r_min; r < r_max; r++)
 			{
-				hough.at<float>(x, y) += hough_space[x][y][r];
+				hough.at<float>(x, y) =  hough.at<float>(x, y) + hough_space[x][y][r];
 			}
 		}
 	}
@@ -630,7 +631,7 @@ vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> 
 		Rect circles_rect(c[0] - c[2], c[1] - c[2], 2 * c[2], 2 * c[2]);
 		circles_rects.push_back(circles_rect);
 	}
-	cout<< "size_hough_circles = " << circles_rects.size() << endl;
+	// cout<< "size_hough_circles = " << circles_rects.size() << endl;
 	// cout << "filter_check 1 " << endl;
 
 	// for (size_t i = 0; i < circles_rects.size(); i++)
@@ -641,17 +642,22 @@ vector<Rect> no_entry_filter(Mat frame, vector<Rect> no_entry_VJ, vector<Vec3f> 
 
 	for (size_t i = 0; i < no_entry_VJ.size(); i++)
 	{
+		bool flag = false;
 		for (size_t j = 0; j < circles_rects.size(); j++)
 		{
 			float IoU = get_iou(circles_rects[j], no_entry_VJ[i]);
 			if (IoU > iou_thredhold)
 			{
-				output.push_back(no_entry_VJ[i]);
+			    flag = true;
 			}
 		}
+		if (flag){
+			output.push_back(no_entry_VJ[i]);
+		}
+
 	}
+	// cout << "output = "<< output.size() << endl;
 	return output;
-	cout << "output = "<< output.size() << endl;
 	// cout << "filter_check 3 " << endl;
 }
 

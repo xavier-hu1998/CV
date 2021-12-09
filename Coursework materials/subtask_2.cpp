@@ -65,14 +65,14 @@ Rect GT_No_Entry7_1(555, 175, 35, 35);
 Rect GT_No_Entry8_1(195, 80, 100, 90);
 Rect GT_No_Entry8_2(145, 180, 60, 60);
 Rect GT_No_Entry8_3(105, 240, 40, 40);
-Rect GT_No_Entry8_4(85 , 260, 30, 30);
+Rect GT_No_Entry8_4(85 , 260, 40, 40);
 
 
 Rect GT_No_Entry9_1(470, 575, 50, 55);
 
 Rect GT_No_Entry10_1(230, 130, 80, 80);
 Rect GT_No_Entry10_2(500, 155, 90, 90);
-Rect GT_No_Entry10_3(580, 170, 50, 70);
+Rect GT_No_Entry10_3(580, 180, 50, 50);
 
 Rect GT_No_Entry11_1(50 , 215, 60, 60);
 Rect GT_No_Entry11_2(440, 160, 90, 85);
