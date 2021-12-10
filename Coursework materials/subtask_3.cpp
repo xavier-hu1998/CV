@@ -589,7 +589,7 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 	{
 		for (int y = 0; y < input.cols; y++)
 		{
-			bool test_pass = 1;
+			bool test = 1;
 			map<int, int> t_circles;
 			for (int r = r_min; r < r_max; r++)
 			{
@@ -598,8 +598,6 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 					t_circles[r] = hough_space[x][y][r];
 				}
 			}
-			int max_c = 0;
-			int max_r = 0;
 
 			for (map<int, int>::const_iterator it = t_circles.begin(); it != t_circles.end(); ++it)
 			{
@@ -610,10 +608,10 @@ vector<Vec3f> hough_circle_transform(Mat &input, int r_min, int r_max, Mat &dire
 					int r = circle[2];
 					if (r - min_distence < it->first && r + min_distence > it->first)
 					{
-						test_pass = false;
+						test = false;
 					}
 				}
-				if (test_pass)
+				if (test)
 				{
 					Vec3f circle(y, x, it->first);
 					circles.push_back(circle);
