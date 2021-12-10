@@ -175,6 +175,10 @@ void detectAndDisplay(Mat frame, string fileName)
 	// imshow("img_m",dst);
 	// imshow("img_d",sobel_d);
 	// imshow("sobel_image_x&y", dst);
+	imwrite("sobel_image_x&y.jpg", dst);
+	// waitKey(0);
+
+
 
 	// cout << "check 2 " << endl;
 
